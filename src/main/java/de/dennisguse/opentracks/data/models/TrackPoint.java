@@ -335,10 +335,15 @@ public class TrackPoint {
         return distanceToPreviousFromLocation(previous);
     }
 
+    public class MissingLocationException extends RuntimeException {
+        public MissingLocationException(String message) {
+            super(message);
+        }
+    }
     @NonNull
     public Distance distanceToPreviousFromLocation(@NonNull TrackPoint previous) {
         if (!hasLocation() || hasLocation() != previous.hasLocation()) {
-            throw new RuntimeException("Cannot compute distance.");
+            throw new MissingLocationException("Cannot compute distance. Location is missing.");
         }
 
         return Distance.of(getLocation().distanceTo(previous.getLocation()));
